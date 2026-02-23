@@ -13,14 +13,13 @@
 
 ## Basic idea
 
-If you primarily work on another system, such as a laptop, and want to use your DGX Spark as a
-remote resource, this playbook shows you how to connect and work over SSH. With SSH, you can
+If you primarily work on another system, such as a laptop, and want to use your **Dell GB10 (DGX Spark)** as a remote resource, this playbook shows you how to connect and work over SSH. With SSH, you can
 securely open a terminal session or tunnel ports to access web apps and APIs on your DGX Spark
 from your local machine.
 
 ## What you'll accomplish
 
-For this lab, you will be accessing the Dell GB10 (DGX Spark) via 2 approaches:
+For this lab, you will be accessing the DGX Spark via 2 approaches:
 
 1. Use VSCode to directly access DGX Spark via VSCode's inbuilt Remote Window.
 2. Map a port on your laptop to a port where an app on DGX Spark is listening. This method is also known as SSH tunneling.
