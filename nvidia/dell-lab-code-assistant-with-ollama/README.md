@@ -117,7 +117,7 @@ models:
 
 ## Let's Try It Out
 
-- From Explorer, open **workshop-lab-1 > lab-1.ipynb**
+- From Explorer, open **lab-1.ipynb** from the previous lab
 
   <img src="./images/tryout-1.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 

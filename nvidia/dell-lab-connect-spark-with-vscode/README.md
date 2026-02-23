@@ -109,21 +109,30 @@ ssh -p 443 <SPARK_USER>@10.123.8.57
 
   <img src="./images/screenshot_11.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 
-- We have prepared jupyterlab notebooks for you. Go to **Explorer > Open Folder > jupyterlab > OK**
+- We have prepared a jupyterlab notebook for you. Go to **Explorer > Open Folder > jupyterlab > OK**
 
   <img src="./images/screenshot_12.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 
-- This will pop up a new VSCode window. **Trust Folder & Continue > Enter password again when prompted**
+- A new VSCode window will pop up. **You will be prompted to enter password again**
 
   <img src="./images/screenshot_13.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
+
+## Let's Try It Out
+
+- Open **lab-1.ipynb** and click `Run All`
+
+> NOTE: If prompted to select environment, select **Python Environments > .venv(3.12.3)(Python 3.12.3)**
+
+- A successful setup will show that the GPU is available
+
+  <img src="./images/screenshot_14.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 
 ## Use SSH Tunneling for Web Applications
 
 To access web applications running on your DGX Spark, use SSH port
 forwarding. In this example we'll access the DGX Dashboard web application.
 
-> [!NOTE]
-> DGX Dashboard runs on localhost, port 11000.
+> NOTE: DGX Dashboard runs on localhost, port 11000.
 
 Open the tunnel:
 
