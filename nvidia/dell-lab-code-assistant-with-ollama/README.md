@@ -37,15 +37,12 @@ You'll have a fully configured DGX Spark system capable of:
 - Internet access for model downloads
 - Basic familiarity with opening the Linux terminal, copying and pasting commands.
 - Having sudo access.
-- Optional: firewall control for remote access configuration
 
 ### Time & risk
 
 - **Duration:** About 30 minutes
 - **Risks:** Data download slowness or failure due to network issues
 - **Rollback:** No permanent system changes made during normal usage.
-- **Last Updated:** 10/21/2025
-  - First publication
 
 ## Instructions
 
@@ -55,6 +52,14 @@ You'll have a fully configured DGX Spark system capable of:
 - Access Spark via VSCode's Remote Window from the previous lab
 
 ## Step 2. Install Ollama
+
+- From your VSCode, open the Terminal by pressing ``Ctrl + ` ``
+
+- Run the terminal in Bash mode
+
+```
+bash
+```
 
 - Install the latest version of Ollama using the following command:
 
