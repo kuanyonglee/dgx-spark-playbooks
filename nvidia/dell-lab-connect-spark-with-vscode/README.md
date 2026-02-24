@@ -118,11 +118,11 @@ ssh -p 443 <SPARK_USER>@<SPARK_IP>
 
 - A new VSCode window will pop up. **You will be prompted to enter password again**
 
-  <img src="./images/screenshot_13.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
-
 ## Let's Try It Out
 
 - Open **lab-1.ipynb** and click `Run All`
+
+   <img src="./images/screenshot_13.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 
 > NOTE: If prompted to select environment, select **Python Environments > .venv(3.12.3)(Python 3.12.3)**
 
