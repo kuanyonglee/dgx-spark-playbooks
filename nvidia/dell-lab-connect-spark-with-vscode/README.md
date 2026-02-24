@@ -51,7 +51,7 @@ These approaches will enable you to run terminal commands, access web applicatio
 
 This lab requires that you download and install VSCode in your laptop. VSCode will also be used in subsequent labs.
 
-Download and install VSCode:
+Download and install VSCode here:
 
 - https://code.visualstudio.com/download
 
@@ -76,7 +76,7 @@ located at the bottom left corner of your screen
 - From the input bar, enter the following ssh command
 
 ```bash
-ssh -p 443 <SPARK_USER>@10.123.8.57
+ssh -p 443 <SPARK_USER>@<SPARK_IP>
 ```
 
   <img src="./images/screenshot_4.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
@@ -105,7 +105,10 @@ ssh -p 443 <SPARK_USER>@10.123.8.57
 
   <img src="./images/screenshot_10.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 
-- The console will bring you into the DGX Spark. To confirm if you are inside DGX Spark, open the Terminal by entering ``Ctrl + ` ``. Your hostname should show **promaxgb10-60b9**
+- The console will log you into the DGX Spark environment.
+  To verify that you are inside DGX Spark, open the terminal by pressing ``Ctrl + ` ``, then enter `bash`
+
+- You should see the following hostname in your terminal, confirming that you are connected to DGX Spark
 
   <img src="./images/screenshot_11.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 
@@ -123,6 +126,8 @@ ssh -p 443 <SPARK_USER>@10.123.8.57
 
 > NOTE: If prompted to select environment, select **Python Environments > .venv(3.12.3)(Python 3.12.3)**
 
+  <img src="./images/venv.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
+
 - A successful setup will show that the GPU is available
 
   <img src="./images/screenshot_14.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
@@ -134,14 +139,15 @@ forwarding. In this example we'll access the DGX Dashboard web application.
 
 > NOTE: DGX Dashboard runs on localhost, port 11000.
 
-Open the tunnel:
+- On VSCode, click on the **Ports** tab
 
-```bash
-## local port 11000 → remote port 11000
-ssh -p 443 -L 11000:localhost:11000 <YOUR_USERNAME>@<SPARK_IP_ADDRESS>
-```
+  <img src="./images/screenshot_15.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
 
-After establishing the tunnel, access the forwarded web app in your browser: [http://localhost:11000](http://localhost:11000)
+- Click **Forward a Port** > Fill in 11000 at the **Port** column. The rest of the fields will be populated for you
+
+    <img src="./images/screenshot_16.png" width="500" style="padding-top: 8px; padding-bottom: 8px">
+
+- Click on <img src="./images/globe.png" width="28"> button to open your browser. You should be able to access your DGX Dashboard
 
 <img src="./images/dgx_dashboard.png" style="padding-top: 8px; padding-bottom: 8px">
 
@@ -149,8 +155,8 @@ After establishing the tunnel, access the forwarded web app in your browser: [ht
 
 If mDNS is configured, you can:
 
-- Open persistent terminal sessions: `ssh <YOUR_USERNAME>@<SPARK_HOSTNAME>.local`.
-- Forward web application ports: `ssh -L <local_port>:localhost:<remote_port> <YOUR_USERNAME>@<SPARK_HOSTNAME>.local`.
+- Open persistent terminal sessions in your host terminal: `ssh <YOUR_USERNAME>@<SPARK_HOSTNAME>.local`.
+- Forward web application ports from your host terminal: `ssh -L <local_port>:localhost:<remote_port> <YOUR_USERNAME>@<SPARK_HOSTNAME>.local`.
 
 ## Troubleshooting
 
