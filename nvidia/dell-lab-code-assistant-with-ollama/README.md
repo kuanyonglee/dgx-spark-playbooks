@@ -73,13 +73,11 @@ curl -fsSL https://ollama.com/install.sh | sh
 ollama pull llama3.2:3b
 ```
 
-- After the model is pulled, open your terminal and run the following command to connect to the Ollama server via SSH tunneling as in the previous lab.
+- After the model is pulled, switch to the **PORTS** tab and add **11434**
 
-```bash
-ssh -p 443 -L 11434:localhost:11434 aih@10.123.8.57
-```
+  <img src="./images/ollama-port.png" style="padding-top: 8px; padding-bottom: 8px">
 
-- Access Ollama server on your browser: [http://localhost:11434](http://localhost:11434)
+- Confirm that you are able to access Ollama service via your browser by clicking on the <img src="./images/globe.png" width="28"> button
 
 <img src="./images/ollama-browser.png" style="padding-top: 8px; padding-bottom: 8px">
 
