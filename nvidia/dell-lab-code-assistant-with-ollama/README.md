@@ -1,4 +1,4 @@
-# Vibe Coding in VS Code
+# Set Up Code Assistant with Ollama
 
 > Use DGX Spark as a local or remote Vibe Coding assistant with Ollama and Continue
 

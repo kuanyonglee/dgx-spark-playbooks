@@ -1,4 +1,4 @@
-# Set Up Local Network Access
+# Connect DGX Spark with VSCode
 
 ## Table of Contents
 
