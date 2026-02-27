@@ -8,10 +8,12 @@
   - [Basic idea](#basic-idea)
   - [What you'll accomplish](#what-youll-accomplish)
   - [What to know before starting](#what-to-know-before-starting)
-  - [Prerequisites](#prerequisites)
   - [Time & risk](#time-risk)
 - [Instructions](#instructions)
+  - [Step 1. Verify environment prerequisites](#step-1-verify-environment-prerequisites)
   - [Step 2. Configure NGC authentication](#step-2-configure-ngc-authentication)
+  - [Step 3. Select and configure NIM container](#step-3-select-and-configure-nim-container)
+  - [Step 4. Launch NIM container](#step-4-launch-nim-container)
 - [Troubleshooting](#troubleshooting)
 
 ---
@@ -33,25 +35,6 @@ You'll launch a NIM container on your DGX Spark device to expose a GPU-accelerat
 - Basic familiarity with REST APIs and curl commands
 - Understanding of NVIDIA GPU environments and CUDA
 
-### Prerequisites
-
-- DGX Spark device with NVIDIA drivers installed
-  ```bash
-  nvidia-smi
-  ```
-- Docker with NVIDIA Container Toolkit configured, instructions [here](https://docs.nvidia.com/dgx/dgx-spark/nvidia-container-runtime-for-docker.html)
-  ```bash
-  docker run -it --gpus=all nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04 nvidia-smi
-  ```
-- NGC account with API key from [here](https://ngc.nvidia.com/setup/api-key)
-  ```bash
-  echo $NGC_API_KEY
-  ```
-- Sufficient disk space for model caching (varies by model, typically 10-50GB)
-  ```bash
-  df -h ~
-  ```
-
 ### Time & risk
 
 - **Estimated time:** 15-30 minutes for setup and validation
@@ -60,9 +43,6 @@ You'll launch a NIM container on your DGX Spark device to expose a GPU-accelerat
   - GPU memory requirements vary by model size
   - Container startup time depends on model loading
 - **Rollback:** Stop and remove containers with `docker stop <CONTAINER_NAME> && docker rm <CONTAINER_NAME>`. Remove cached models from `~/.cache/nim` if disk space recovery is needed.
-- **Last Updated:** 12/22/2025
-  - Update docker container version to cuda:13.0.1-devel-ubuntu24.04
-  - Add docker container permission setup instructioins
 
 ## Instructions
 
@@ -76,16 +56,13 @@ docker --version
 docker run --rm --gpus all nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04 nvidia-smi
 ```
 
-If you see a permission denied error (something like permission denied while trying to connect to the Docker daemon socket), add your user to the docker group so that you don't need to run the command with sudo .
-
-```bash
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
 ### Step 2. Configure NGC authentication
 
 Set up access to NVIDIA's container registry using your NGC API key.
+
+```bash
+export NGC_API_KEY=<USER_NGC_API_KEY>
+```
 
 ```bash
 echo "$NGC_API_KEY" | docker login nvcr.io --username '$oauthtoken' --password-stdin
@@ -104,7 +81,6 @@ export CONTAINER_NAME="nim-llm-demo-$USER"
 Choose a specific LLM NIM from NGC and set up local caching for model assets. Enter your password if required.
 
 ```bash
-export CONTAINER_NAME="nim-llm-demo"
 export IMG_NAME="nvcr.io/nim/meta/llama-3.1-8b-instruct-dgx-spark:latest"
 export LOCAL_NIM_CACHE=~/.cache/nim
 export LOCAL_NIM_WORKSPACE=~/.local/share/nim/workspace
@@ -138,7 +114,7 @@ Test the deployed service with a basic completion request to verify functionalit
 
 ```bash
 curl -X 'POST' \
-    'http://0.0.0.0:8000/v1/chat/completions' \
+    "http://0.0.0.0:8000/v1/chat/completions" \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -d '{
