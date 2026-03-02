@@ -76,7 +76,7 @@ located at the bottom left corner of your screen
 - From the input bar, enter the following ssh command
 
 ```bash
-ssh -p 443 <SPARK_USER>@<SPARK_IP>
+ssh -p <ASSIGNED_PORT> <SPARK_USER>@<SPARK_IP>
 ```
 
   <img src="./images/screenshot_4.png" width="500" style="padding-top: 8px; padding-bottom: 8px">

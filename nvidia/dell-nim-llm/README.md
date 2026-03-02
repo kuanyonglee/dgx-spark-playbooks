@@ -42,7 +42,7 @@ You'll launch a NIM container on your DGX Spark device to expose a GPU-accelerat
   - Large model downloads may take significant time depending on network speed
   - GPU memory requirements vary by model size
   - Container startup time depends on model loading
-- **Rollback:** Stop and remove containers with `docker stop <CONTAINER_NAME> && docker rm <CONTAINER_NAME>`. Remove cached models from `~/.cache/nim` if disk space recovery is needed.
+- **Rollback:** Stop and remove containers with `docker stop <CONTAINER_NAME> && docker rm <CONTAINER_NAME>`
 
 ## Instructions
 
@@ -151,12 +151,6 @@ Remove the running container and optionally clean up cached model files.
 ```bash
 docker stop $CONTAINER_NAME
 docker rm $CONTAINER_NAME
-```
-
-To remove cached models and free disk space:
-
-```bash
-rm -rf "$LOCAL_NIM_CACHE"
 ```
 
 ## Step 7. Next steps
