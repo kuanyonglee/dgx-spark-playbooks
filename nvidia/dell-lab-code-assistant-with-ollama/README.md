@@ -18,7 +18,7 @@
 ## Basic idea
 
 This playbook walks you through setting up **Dell GB10 (DGX Spark)** as a **Coding Assistant** — locally or as a remote coding companion for VSCode with Continue.dev.  
-This guide uses **Ollama** with **Llama-3.2 3B** to provide easy deployment of a coding assistant to VSCode. Included is advanced instructions to allow DGX Spark and Ollama to provide the coding assistant to be available over your local network.
+This guide uses **Ollama** with **Llama3.2 3B** to provide easy deployment of a coding assistant to VSCode. Included is advanced instructions to allow DGX Spark and Ollama to provide the coding assistant to be available over your local network.
 
 ### What You'll Accomplish
 
@@ -30,7 +30,7 @@ You'll have a fully configured DGX Spark system capable of:
 ### Prerequisites
 
 - DGX Spark (128GB unified memory recommended)
-- **Ollama** and an LLM of your choice (e.g., `llama3.2:120b`)
+- **Ollama** and an LLM of your choice (e.g., `llama3.2:3b`)
 - **VSCode**
 - **Continue** VSCode extension
 - Internet access for model downloads
