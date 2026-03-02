@@ -39,11 +39,9 @@ These approaches will enable you to run terminal commands, access web applicatio
 - You have your device's IP address
 - VSCode installed in your local machine
 
-## Time & risk
+## Time
 
-- **Time estimate:** 15-20 minutes
-- **Risk level:** Low - SSH setup involves credential configuration but no system-level changes to the DGX Spark device
-- **Rollback:** SSH key removal can be done by editing `~/.ssh/authorized_keys` on your DGX Spark.
+- **Estimated time:** 15-20 minutes
 
 ## Accessing DGX Spark via VS Code Remote Window
 
