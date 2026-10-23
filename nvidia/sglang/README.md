@@ -17,7 +17,7 @@
 
 SGLang is a fast serving framework for large language models and vision language models that makes
 your interaction with models faster and more controllable by co-designing the backend runtime and
-frontend language. This setup uses the optimized NVIDIA SGLang NGC Container on a single NVIDIA
+frontend language. This setup uses the optimized SGLang CUDA container on a single NVIDIA
 Spark device with Blackwell architecture, providing GPU-accelerated inference with all dependencies
 pre-installed.
 
@@ -39,9 +39,9 @@ vision-language tasks using models like DeepSeek-V2-Lite.
 - NVIDIA Spark device with Blackwell architecture
 - Docker Engine installed and running: `docker --version`
 - NVIDIA GPU drivers installed: `nvidia-smi`
-- NVIDIA Container Toolkit configured: `docker run --rm --gpus all lmsysorg/sglang:spark nvidia-smi`
+- NVIDIA Container Toolkit configured: `docker run --rm --gpus all lmsysorg/sglang:latest-cu130 nvidia-smi`
 - Sufficient disk space (>20GB available): `df -h`
-- Network connectivity for pulling NGC containers: `ping nvcr.io`
+- Network connectivity for pulling containers: `docker pull lmsysorg/sglang:latest-cu130`
 
 ## Ancillary files
 
@@ -53,6 +53,7 @@ The following models are supported with SGLang on Spark. All listed models are a
 
 | Model | Quantization | Support Status | HF Handle |
 |-------|-------------|----------------|-----------|
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | BF16 | ✅ | [`nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16`](https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16) |
 | **GPT-OSS-20B** | MXFP4 | ✅ | `openai/gpt-oss-20b` |
 | **GPT-OSS-120B** | MXFP4 | ✅ | `openai/gpt-oss-120b` |
 | **Llama-3.1-8B-Instruct** | FP8 | ✅ | `nvidia/Llama-3.1-8B-Instruct-FP8` |
@@ -73,14 +74,21 @@ Note: for NVFP4 models, add the `--quantization modelopt_fp4` flag.
 ### Time & risk
 
 * **Estimated time:** 30 minutes for initial setup and validation
-* **Risk level:** Low - Uses pre-built, validated SGLang container with minimal configuration
+* **Risk level:** Low - Uses the pre-built SGLang CUDA container with minimal configuration
 * **Rollback:** Stop and remove containers with `docker stop` and `docker rm` commands
-* **Last Updated:** 01/02/2026
-    * Add Model Support Matrix
+* **Last Updated:** 04/28/2026
+    * Introduce Nemotron-3-Nano-Omni reasoning FP8 support
 
 ## Instructions
 
-## Step 1. Verify system prerequisites
+## Step 1. Use model specific deployment guide
+
+Certain models require special deployment configurations. Please refer to their respective model cards to run on DGX Spark:
+| Model | Quantization | HF Model Card Link |
+|-------|-------------|----------------|
+| **Nemotron-3-Nano-Omni-30B-A3B-Reasoning** | BF16 | https://huggingface.co/nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16 |
+
+## Step 2. Verify system prerequisites
 
 Check that your NVIDIA Spark device meets all requirements before proceeding. This step runs on
 your host system and ensures Docker, GPU drivers, and container toolkit are properly configured. 
@@ -88,6 +96,9 @@ your host system and ensures Docker, GPU drivers, and container toolkit are prop
 > Note: If you experience timeouts or "connection refused" errors while pulling the container image, you may need to use a VPN or a proxy, as some registries may be restricted by your local network or ISP.
 
 ```bash
+## Use the latest CUDA 13.0 SGLang image.
+export SGLANG_IMAGE="lmsysorg/sglang:latest-cu130"
+
 ## Verify Docker installation
 docker --version
 
@@ -95,7 +106,7 @@ docker --version
 nvidia-smi
 
 ## Verify Docker GPU support
-docker run --rm --gpus all lmsysorg/sglang:spark nvidia-smi
+docker run --rm --gpus all "$SGLANG_IMAGE" nvidia-smi
 
 ## Check available disk space
 df -h /
@@ -108,35 +119,39 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-## Step 2. Pull the SGLang Container
+## Step 3. Pull the SGLang Container
 
 Download the latest SGLang container. This step runs on the host and may take
 several minutes depending on your network connection.
 
 
 ```bash
+export SGLANG_IMAGE="lmsysorg/sglang:latest-cu130"
+
 ## Pull the SGLang container
-docker pull lmsysorg/sglang:spark
+docker pull "$SGLANG_IMAGE"
 
 ## Verify the image was downloaded
-docker images | grep sglang
+docker images --digests | grep sglang
 ```
 
-## Step 3. Launch SGLang container for server mode
+## Step 4. Launch SGLang container for server mode
 
 Start the SGLang container in server mode to enable HTTP API access. This runs the inference
 server inside the container, exposing it on port 30000 for client connections.
 
 ```bash
+export SGLANG_IMAGE="lmsysorg/sglang:latest-cu130"
+
 ## Launch container with GPU support and port mapping
 docker run --gpus all -it --rm \
   -p 30000:30000 \
   -v /tmp:/tmp \
-  lmsysorg/sglang:spark \
+  "$SGLANG_IMAGE" \
   bash
 ```
 
-## Step 4. Start the SGLang inference server
+## Step 5. Start the SGLang inference server
 
 Inside the container, launch the HTTP inference server with a supported model. This step runs
 inside the Docker container and starts the SGLang server daemon.
@@ -152,21 +167,21 @@ python3 -m sglang.launch_server \
   --attention-backend flashinfer \
   --mem-fraction-static 0.75 &
 
-## Wait for server to initialize
-sleep 30
+## Wait for the server to become ready
+timeout 900 bash -c 'until curl -sf http://localhost:30000/health > /dev/null; do sleep 5; done'
 
 ## Check server status
-curl http://localhost:30000/health
+curl -f http://localhost:30000/health
 ```
 
-## Step 5. Test client-server inference
+## Step 6. Test client-server inference
 
 From a new terminal on your host system, test the SGLang server API to ensure it's working
 correctly. This validates that the server is accepting requests and generating responses.
 
 ```bash
 ## Test with curl
-curl -X POST http://localhost:30000/generate \
+curl -f -X POST http://localhost:30000/generate \
   -H "Content-Type: application/json" \
   -d '{
       "text": "What does NVIDIA love?",
@@ -177,12 +192,13 @@ curl -X POST http://localhost:30000/generate \
   }'
 ```
 
-## Step 6. Test Python client API
+## Step 7. Test Python client API
 
-Create a simple Python script to test programmatic access to the SGLang server. This runs on
-the host system and demonstrates how to integrate SGLang into applications.
+Test programmatic access to the SGLang server from the host system. This demonstrates how to
+integrate SGLang into Python applications.
 
-```python
+```bash
+python3 << 'EOF'
 import requests
 
 ## Send prompt to server
@@ -195,17 +211,18 @@ response = requests.post('http://localhost:30000/generate', json={
 })
 
 print(f"Response: {response.json()['text']}")
+EOF
 ```
 
-## Step 7. Validate installation
+## Step 8. Validate installation
 
 Confirm that both server and offline modes are working correctly. This step verifies the
 complete SGLang setup and ensures reliable operation.
 
 ```bash
 ## Check server mode (from host)
-curl http://localhost:30000/health
-curl -X POST http://localhost:30000/generate -H "Content-Type: application/json" \
+curl -f http://localhost:30000/health
+curl -f -X POST http://localhost:30000/generate -H "Content-Type: application/json" \
   -d '{"text": "Hello", "sampling_params": {"max_new_tokens": 10}}'
 
 ## Check container logs
@@ -213,7 +230,7 @@ docker ps
 docker logs <CONTAINER_ID>
 ```
 
-## Step 8. Cleanup and rollback
+## Step 9. Cleanup and rollback
 
 Stop and remove containers to clean up resources. This step returns your system to its
 original state.
@@ -229,10 +246,10 @@ docker ps | grep sglang | awk '{print $1}' | xargs docker stop
 docker container prune -f
 
 ## Remove SGLang images (optional)
-docker rmi lmsysorg/sglang:spark
+docker rmi lmsysorg/sglang:latest-cu130
 ```
 
-## Step 9. Next steps
+## Step 10. Next steps
 
 With SGLang successfully deployed, you can now:
 

@@ -1,0 +1,7 @@
+torch>=2.14.1
+tqdm
+python-arango
+torch-geometric
+transformers>=5.19.0
+sentence-transformers==6.1.0
+numpy
