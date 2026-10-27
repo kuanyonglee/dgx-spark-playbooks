@@ -52,9 +52,9 @@ You will deploy NVIDIA's VSS AI Blueprint on NVIDIA Spark hardware with Blackwel
   * Network configuration conflicts if shared network already exists
   * Remote API endpoints may have rate limits or connectivity issues (hybrid deployment)
 * **Rollback:** Stop all containers with `deploy/docker/scripts/dev-profile.sh down`
-* **Last Updated:** 06/17/2026
+* **Last Updated:** 27/10/2026
   * Update required OS and Driver versions
-  * Support for VSS 3.2.0 with Cosmos Reason 2 VLM
+  * Support for VSS 3.3.0 with Cosmos Reason 3 VLM
 
 ## Instructions
 
