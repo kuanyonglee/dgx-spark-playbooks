@@ -121,50 +121,7 @@ git lfs install
 git lfs pull
 ```
 
-## Step 4. Run the cache cleaner script
-
-Start the system cache cleaner to optimize memory usage during container operations.
-
-Create the cache cleaner script at /usr/local/bin/sys-cache-cleaner.sh mentioned below
-
-```bash
-sudo tee /usr/local/bin/sys-cache-cleaner.sh << 'EOF'
-#!/bin/bash
-## Exit immediately if any command fails
-set -e
-
-## Disable hugepages
-echo "disable vm/nr_hugepage"
-echo 0 | tee /proc/sys/vm/nr_hugepages
-
-## Notify that the cache cleaner is running
-echo "Starting cache cleaner - Running"
-echo "Press Ctrl + C to stop"
-## Repeatedly sync and drop caches every 3 seconds
-while true; do
-     sync && echo 3 | tee /proc/sys/vm/drop_caches > /dev/null
-     sleep 3
-done
-EOF
-
-sudo chmod +x /usr/local/bin/sys-cache-cleaner.sh
-```
-Running in the background
-
-```bash
-## In another terminal, start the cache cleaner script.
-sudo -b /usr/local/bin/sys-cache-cleaner.sh
-```
-
-**NOTE**
-The above runs the cache cleaner in the current session only; it does not persist across reboots. To have the cache cleaner run across reboots, create a systemd service instead. 
-To stop the background cache cleaner:
-```bash
-sudo pkill -f sys-cache-cleaner.sh
-```
-
-
-## Step 5. Authenticate with NVIDIA Container Registry
+## Step 4. Authenticate with NVIDIA Container Registry
 
 Log in to NVIDIA's container registry using your NGC API Key.
 
@@ -181,7 +138,7 @@ docker login nvcr.io
 ## Password: <PASTE_NGC_API_KEY_HERE>
 ```
 
-## Step 6. Choose deployment scenario
+## Step 5. Choose deployment scenario
 
 Below are the deployment options for different scenario and use cases:
 
@@ -193,13 +150,13 @@ Below are the deployment options for different scenario and use cases:
 
 For our example, we will focus on the **Standard VSS (Base)**.
 
-## Step 7. Launch VSS 
+## Step 6. Launch VSS 
 
 **[Standard VSS](https://docs.nvidia.com/vss/latest/#architecture-overview) (Hybrid Deployment)**
 
 The Standard VSS (base) consists of a hybrid deployment. We would use NIMs from [build.nvidia.com](https://build.nvidia.com/). Alternatively, you can configure your own hosted endpoints by following the instructions in the [VSS remote LLM deployment guide](https://docs.nvidia.com/vss/latest/vss-agent/configure-llm.html).
 
-### 7.1 Launch Standard VSS deployment
+### 6.1 Launch Standard VSS deployment
 
 ```bash
 ## Start Standard VSS (Base)
@@ -226,17 +183,17 @@ Set the following environment variables before deployment:
 Run **`deploy/docker/scripts/dev-profile.sh --help`** for a full list of supported arguments.
 
 
-**7.3 Validate Standard VSS deployment**
+### 6.2 Validate Standard VSS deployment
 
 Open `http://localhost:7777` in your browser to access the Agent interface.
 
 <img src="./images/vss_ui.png" style="padding-top: 8px; padding-bottom: 8px">
 
-## Step 8. Test video processing workflow
+## Step 7. Test video processing workflow
 
 Upload a video to verify the video analysis pipeline is functioning based on your deployment.
 
-### 8.1 Download Sample Videos
+### 7.1 Download Sample Videos
 ```bash
 wget --content-disposition https://api.ngc.nvidia.com/v2/resources/nvidia/ngc-apps/ngc_cli/versions/4.34.10/files/ngccli_arm64.zip -O ngccli_arm64.zip && unzip ngccli_arm64.zip
 
@@ -268,7 +225,7 @@ tar -xf dev-profile-sample-data_v3.3.0/dev-profile-sample-data.tar.gz -C "${EXTR
 rm -rf dev-profile-sample-data_v3.3.0
 ```
 
-### 8.2 Upload Sample Videos to VSS
+### 7.2 Upload Sample Videos to VSS
 
 1. From VSS app, either drag and drop sample videos, or left-click on the icon and select one of the videos you have just downloaded. For this example, we will use `warehouse_safety_0002.mp4`.
 
@@ -295,7 +252,7 @@ rm -rf dev-profile-sample-data_v3.3.0
 <img src="./images/vss_pdf_report.png" style="padding-top: 8px; padding-bottom: 8px">
 
 
-## Step 9. Cleanup and rollback
+## Step 8. Cleanup and rollback
 
 To completely remove the VSS deployment and free up system resources, follow the steps below:
 
@@ -307,7 +264,7 @@ To completely remove the VSS deployment and free up system resources, follow the
 deploy/docker/scripts/dev-profile.sh down
 ```
 
-## Step 10. Next steps (Optional)
+## Step 9. Next steps (Optional)
 
 You can optionally experiment with other types of VSS scenarios. You would need to remove your current VSS and redeploy one of the scenarios below.
 
