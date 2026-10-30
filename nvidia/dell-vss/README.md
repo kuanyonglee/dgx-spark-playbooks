@@ -129,7 +129,7 @@ Log in to NVIDIA's container registry using your NGC API Key.
 2. Click your profile > **API Keys** and generate one
 3. Copy and save your NGC API Key in somewhere safe
 
-**NOTE** In production environment, ensure that NGC API Key is stored securely. It is also a good practice to refresh your API Key regularly.
+> [!NOTE] For this lab, obtain your **NGC API Key** [here](https://1drv.ms/f/c/caad4a5082279add/IgCgeu55MCjZS62aB5i4C-nMAUrIYCfBCytWMjOF6_s69tY?e=9m6hfe) or get instructions from the instructor.
 
 ```bash
 ## Log in to NVIDIA Container Registry
@@ -161,8 +161,8 @@ The Standard VSS (base) consists of a hybrid deployment. We would use NIMs from 
 ```bash
 ## Start Standard VSS (Base)
 
-export NGC_CLI_API_KEY='your_api_key'
-export NVIDIA_API_KEY='your_api_key'
+export NGC_CLI_API_KEY='ngc_api_key'
+export NVIDIA_API_KEY='ngc_api_key'
 export VSS_CONTAINER_TAG="3.3.0"
 export LLM_ENDPOINT_URL=https://integrate.api.nvidia.com
 
@@ -194,36 +194,7 @@ Open `http://localhost:7777` in your browser to access the Agent interface.
 Upload a video to verify the video analysis pipeline is functioning based on your deployment.
 
 ### 7.1 Download Sample Videos
-```bash
-wget --content-disposition https://api.ngc.nvidia.com/v2/resources/nvidia/ngc-apps/ngc_cli/versions/4.34.10/files/ngccli_arm64.zip -O ngccli_arm64.zip && unzip ngccli_arm64.zip
-
-# Check the binary's md5 hash to ensure the file wasn't corrupted during download
-find ngc-cli/ -type f -exec md5sum {} + | LC_ALL=C sort | md5sum -c ngc-cli.md5
-
-# Check the binary's SHA256 hash to ensure the file wasn't corrupted during download
-sha256sum ngccli_arm64.zip
-
-# After verifying value, make the NGC CLI binary executable and add your current directory to path
-chmod u+x ngc-cli/ngc
-echo "export PATH=\"\$PATH:$(pwd)/ngc-cli\"" >> ~/.bash_profile && source ~/.bash_profile
-
-ngc config set
-
-# When prompted:
-# Include your NGC API key 
-# Enter CLI output format type: json
-# Enter org: Press Enter
-# Enter team: Press Enter
-
-# Download sample data
-ngc registry resource download-version nvidia/vss-developer/dev-profile-sample-data:3.3.0
-
-EXTRACT_DIR="${PWD}/sample-data"
-mkdir -p "${EXTRACT_DIR}"
-tar -xf dev-profile-sample-data_v3.3.0/dev-profile-sample-data.tar.gz -C "${EXTRACT_DIR}"
-
-rm -rf dev-profile-sample-data_v3.3.0
-```
+Download a sample video [here](https://1drv.ms/f/c/caad4a5082279add/IgAvJUuJiA9ORpd5v0DBO1u_Abv3AnanKNukVVdT4sMgfJ4?e=bgTD9M).
 
 ### 7.2 Upload Sample Videos to VSS
 
@@ -271,8 +242,8 @@ You can optionally experiment with other types of VSS scenarios. You would need 
 ```bash
 
 ## Start Standard VSS (Alert Verification)
-export NGC_CLI_API_KEY='your_ngc_api_key'
-export NVIDIA_API_KEY='your_ngc_api_key'
+export NGC_CLI_API_KEY='ngc_api_key'
+export NVIDIA_API_KEY='ngc_api_key'
 export VSS_CONTAINER_TAG="3.3.0"
 export LLM_ENDPOINT_URL=https://integrate.api.nvidia.com
 
@@ -280,8 +251,8 @@ deploy/docker/scripts/dev-profile.sh up -p alerts -m verification -H DGX-SPARK -
 
 
 ## Start Standard VSS (Real-Time Alerts)
-export NGC_CLI_API_KEY='your_ngc_api_key'
-export NVIDIA_API_KEY='your_ngc_api_key'
+export NGC_CLI_API_KEY='ngc_api_key'
+export NVIDIA_API_KEY='ngc_api_key'
 export VSS_CONTAINER_TAG="3.3.0"
 export LLM_ENDPOINT_URL=https://integrate.api.nvidia.com
 
