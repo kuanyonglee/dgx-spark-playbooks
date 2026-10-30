@@ -125,11 +125,12 @@ git lfs pull
 
 Log in to NVIDIA's container registry using your NGC API Key.
 
-1. Sign up/Log in to [NVIDIA Build](https://build.nvidia.com/)
-2. Click your profile > **API Keys** and generate one
+1. Sign up/Log in to [NVIDIA NGC Portal](https://org.ngc.nvidia.com/)
+2. Click your profile > Account Settings > Keys & Secrets > Generate API Key
 3. Copy and save your NGC API Key in somewhere safe
 
-> [!NOTE] For this lab, obtain your **NGC API Key** [here](https://1drv.ms/f/c/caad4a5082279add/IgCgeu55MCjZS62aB5i4C-nMAUrIYCfBCytWMjOF6_s69tY?e=9m6hfe) or get instructions from the instructor.
+> [!NOTE] 
+> For this lab, obtain your **NGC API Key** [here](https://1drv.ms/f/c/caad4a5082279add/IgCgeu55MCjZS62aB5i4C-nMAUrIYCfBCytWMjOF6_s69tY?e=9m6hfe) or get instructions from the instructor.
 
 ```bash
 ## Log in to NVIDIA Container Registry
